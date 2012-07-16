@@ -13,7 +13,7 @@ class GlossariesController < ApplicationController
   # GET /glossaries/1
   # GET /glossaries/1.json
   def show
-    @glossary = Glossary.find(params[:id])
+    @glossary = Glossary.find(params[:id]).prepare_for_display
 
     respond_to do |format|
       format.html # show.html.erb
@@ -26,6 +26,7 @@ class GlossariesController < ApplicationController
   def new
     @glossary = Glossary.new
 
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @glossary }
@@ -34,13 +35,13 @@ class GlossariesController < ApplicationController
 
   # GET /glossaries/1/edit
   def edit
-    @glossary = Glossary.find(params[:id])
+    @glossary = Glossary.find(params[:id]).prepare_for_display
   end
 
   # POST /glossaries
   # POST /glossaries.json
   def create
-    @glossary = Glossary.new(params[:glossary])
+    @glossary = Glossary.create_glossary(params[:glossary])
 
     respond_to do |format|
       if @glossary.save
@@ -57,9 +58,10 @@ class GlossariesController < ApplicationController
   # PUT /glossaries/1.json
   def update
     @glossary = Glossary.find(params[:id])
+    saved = @glossary.update_glossary(params[:glossary])
 
     respond_to do |format|
-      if @glossary.update_attributes(params[:glossary])
+      if saved
         format.html { redirect_to @glossary, notice: 'Glossary was successfully updated.' }
         format.json { head :no_content }
       else

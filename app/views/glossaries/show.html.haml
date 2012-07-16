@@ -1,0 +1,32 @@
+.page-header
+  %h1= t('.title')
+
+  %dl.dl-horizontal
+    %dt
+      %strong= "#{@glossary.class.human_attribute_name(:languages)}:"
+    %dd= @glossary.languages
+
+- @glossary.languages.each do |glossary_locale|
+  - translation = @glossary.translation(glossary_locale) || @glossary.translations.new(:locale => glossary_locale)
+  - translation_class = translation.class
+  .glossary_locale_detail{ :data => {:locale => glossary_locale}}
+    %div{:style => "float:right; padding: 0 10px 0 0"}
+      = glossary_locale
+    %dl.dl-horizontal
+      %dt
+        %strong= "#{translation_class.human_attribute_name(:name)}:"
+      %dd= translation.name.present? ? translation.name : '_'.html_safe
+      %dt
+        %strong= "#{translation_class.human_attribute_name(:description)}:"
+      %dd= translation.description.present? ? translation.description : '_'.html_safe
+
+.form-actions
+  = link_to t('.back', :default => t("helpers.links.back")),
+            glossaries_path, :class => 'btn'
+  = link_to t('.edit', :default => t("helpers.links.edit")),
+            edit_glossary_path(@glossary), :class => 'btn'
+  = link_to t('.destroy', :default => t("helpers.links.destroy")),
+            glossary_path(@glossary),
+            :method => 'delete',
+            :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+            :class => 'btn btn-danger'

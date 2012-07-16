@@ -1,0 +1,17 @@
+%h1 Welcome at GLOQ!
+
+%p
+  = "With GLOQ you can create <strong>GLO</strong>ssaries and FA<strong>Q</strong>s.".html_safe
+
+%p
+  Find your terms in&hellip;
+
+.search
+  = text_field_tag :glossary, '', :placeholder => 'Search a glossary&hellip;'.html_safe
+  or
+  = link_to('browse',   glossaries_path)
+  the glossaries
+  %br
+  = text_field_tag :terms, '', :placeholder => 'and/or enter a term.'.html_safe
+
+

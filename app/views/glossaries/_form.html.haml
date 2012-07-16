@@ -1,0 +1,23 @@
+- @glossary.errors.each do |name, msg|
+  - if name =~ /^extra_/
+    .alert.alert-error
+      %a.close(data-dismiss="alert") ×
+      = msg
+
+= simple_form_for @glossary, :html => { :class => 'form-horizontal' } do |f|
+  = f.input :languages_string, :label => 'Sprachen', :placeholder => 'Sprachen, durch Komma getrennt'
+
+  %h4 Name and description for each language (fill in at least on name).
+
+  - @glossary.languages.each do |language|
+    .glossary_locale_detail
+      %span.title
+        = language
+      = f.simple_fields_for :translations, index: language do |translations_f|
+        = translations_f.input :name,        index: language, input_html: { value: @glossary.name(language) }
+        = translations_f.input :description, index: language, input_html: { value: @glossary.description(language) }
+
+  .form-actions
+    = f.submit nil, :class => 'btn btn-primary'
+    = link_to t('.cancel', :default => t("helpers.links.cancel")),
+                glossaries_path, :class => 'btn'
