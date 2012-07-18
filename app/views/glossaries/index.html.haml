@@ -1,0 +1,79 @@
+%style
+  :sass
+
+    .language_selection
+      float: right
+
+      .btn-label
+        float:         left
+        height:        28px
+        line-height:   28px
+        padding-right: 5px
+
+      .language_select
+        float: left
+
+
+- model_class = Glossary.new.class
+.page-header
+  .btn-toolbar
+    %h1(style='display:inline')= t('.title', :default => model_class.model_name.human.pluralize)
+    .language_selection
+      %form.form-search
+        %input.search-query{:style => 'float:left;', :type => "text", :placeholder => "Type a text to search&hellip;".html_safe}
+
+        .btn-group.language_select
+          %a.btn.language_value(href='#' data-locale='all')= t('shared.all')
+          %a.btn.dropdown-toggle(href='#' data-toggle="dropdown")
+            %span.caret
+          %ul.dropdown-menu
+            %li
+              %a{href: '#', data: { locale: 'all'} }= t('shared.all')
+            %li.divider
+            - %w(de fr it es en).each do |language_code|
+              %li
+                %a{href: '#', data: { locale: language_code} }= language_code
+
+        %button.btn(type="submit")Search
+
+      .clear_both
+    .clear_both
+
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= model_class.human_attribute_name(:name)
+      %th= model_class.human_attribute_name(:languages)
+      %th= model_class.human_attribute_name(:description)
+      %th= t('.actions', :default => t("helpers.actions"))
+  %tbody
+    - @glossaries.each do |glossary|
+      %tr
+        %td
+          %ul.unstyled
+            - glossary.language_codes.each do |language_code|
+              %li= link_to "#{glossary.name(language_code)} [#{language_code}]", glossary_path(glossary, {:locale => language_code})
+        %td
+          %ul.unstyled
+            - glossary.languages.each do |language_code|
+              %li= language_code.language
+        %td
+          %ul.unstyled
+            - glossary.language_codes.each do |code|
+              %li
+                = glossary.description(code).truncate(40 + 8, :omission => '&hellip;').html_safe
+                - if glossary.description(code).length > 40
+                  %span.hint(title = "#{glossary.description(code)}") (?)
+        %td
+          = link_to t('.edit', :default => t("helpers.links.edit")),
+                    edit_glossary_path(glossary), :class => 'btn btn-mini'
+          = link_to t('.destroy', :default => t("helpers.links.destroy")),
+                    glossary_path(glossary),
+                    :method => :delete,
+                    :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                    :class => 'btn btn-mini btn-danger'
+
+= link_to t('.new', :default => t("helpers.links.new")),
+          new_glossary_path,
+          :class => 'btn btn-primary'

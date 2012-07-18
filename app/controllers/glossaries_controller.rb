@@ -14,6 +14,7 @@ class GlossariesController < ApplicationController
   # GET /glossaries/1.json
   def show
     @glossary = Glossary.find(params[:id]).prepare_for_display
+    set_glossary_locale(params[:locale]) if params[:locale]
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,7 +26,6 @@ class GlossariesController < ApplicationController
   # GET /glossaries/new.json
   def new
     @glossary = Glossary.new
-
 
     respond_to do |format|
       format.html # new.html.erb
@@ -81,5 +81,10 @@ class GlossariesController < ApplicationController
       format.html { redirect_to glossaries_url }
       format.json { head :no_content }
     end
+  end
+
+  def locale
+    set_glossary_locale(params[:locale])
+    render nothing: true
   end
 end

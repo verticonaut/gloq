@@ -1,17 +1,25 @@
 %h1 Welcome at GLOQ!
 
-%p
-  = "With GLOQ you can create <strong>GLO</strong>ssaries and FA<strong>Q</strong>s.".html_safe
+.intro
+  = "GLOQ is your center for <strong>GLO</strong>ssaries and FA<strong>Q</strong>s.".html_safe
 
-%p
-  Find your terms in&hellip;
+.section
+  .title= "Find your terms in the <strong>Glossaries</strong>&hellip;".html_safe
+  .search
+    = text_field_tag :glossary_search, '', :placeholder => 'Search a glossary&hellip;'.html_safe
+    or
+    = link_to('browse',   glossaries_path)
+    the glossaries
+    %br
+    = text_field_tag :term_search, '', :placeholder => 'and/or enter a term.'.html_safe
 
-.search
-  = text_field_tag :glossary, '', :placeholder => 'Search a glossary&hellip;'.html_safe
-  or
-  = link_to('browse',   glossaries_path)
-  the glossaries
-  %br
-  = text_field_tag :terms, '', :placeholder => 'and/or enter a term.'.html_safe
-
+.section
+  .title= "Find your questions in the <strong>FAQs</strong>&hellip;".html_safe
+  .search
+    = text_field_tag :faq_search, '', :placeholder => 'Search an FAQ&hellip;'.html_safe
+    or
+    = link_to('browse',   glossaries_path)
+    the FAQs
+    %br
+    = text_field_tag :question_search, '', :placeholder => 'and/or enter a term.'.html_safe
 

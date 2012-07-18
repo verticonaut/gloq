@@ -65,10 +65,16 @@ class Glossary < ActiveRecord::Base
   end
 
 
-  def languages
+  def language_codes
     return [] if languages_string.blank?
 
     languages_string.split(',').map { |lang| lang.strip }
+  end
+
+  def languages
+    return [] if languages_string.blank?
+
+    language_codes.map { |code| Codes::Language.new(code) }
   end
 
 
@@ -77,7 +83,7 @@ class Glossary < ActiveRecord::Base
   end
 
   def prepare_for_display
-    self.languages.each do |glossary_locale|
+    self.language_codes.each do |glossary_locale|
       translations.new(locale: glossary_locale) unless self.translation(glossary_locale)
     end
 

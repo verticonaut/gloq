@@ -1,5 +1,9 @@
 MyNewApp::Application.routes.draw do
-  resources :glossaries
+  resources :glossaries do
+    collection do
+      post :locale
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

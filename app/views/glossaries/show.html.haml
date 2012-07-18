@@ -1,17 +1,83 @@
+:javascript
+  $(function(){
+    $('.language_select li a').click(function(){
+      var selected_locale = $(this).data('locale');
+      var selected_text   = $(this).text();
+      var target = $('.language_select .language_value');
+
+      $(target).text(selected_text);
+      $(target).attr('data-locale', selected_locale);
+
+      if (selected_locale == 'all') {
+        $('.glossary_locale_detail[data-locale]').slideDown();
+      } else {
+        $('.glossary_locale_detail[data-locale!=' + selected_locale + ']').slideUp();
+        $('.glossary_locale_detail[data-locale='  + selected_locale + ']').slideDown();
+      }
+
+      // .. finally post the change to the session
+      $.post('/glossaries/locale', { locale: selected_locale });
+    });
+
+    // initial click to setup
+    $('.glossary_locale_detail[data-locale='  + "#{glossary_locale(@glossary)}" + ']').show();
+  });
+
+%style
+  :sass
+
+    .language_selection
+      float: right
+
+      .btn-label
+        float:         left
+        height:        28px
+        line-height:   28px
+        padding-right: 5px
+
+      .language_select
+        float: left
+
+    .glossary_locale_detail
+      display: none
+
+      .language_indicator
+        float:   right
+        padding: 0 10px 0 0
+
 .page-header
   %h1= t('.title')
 
   %dl.dl-horizontal
     %dt
       %strong= "#{@glossary.class.human_attribute_name(:languages)}:"
-    %dd= @glossary.languages
+    %dd= @glossary.languages.map { |language| language.language }.join(', ')
 
-- @glossary.languages.each do |glossary_locale|
+.btn-toolbar
+  .language_selection
+    .btn-label= "#{t('shared.language')}:"
+    .btn-group.language_select
+      - glossary_locale = glossary_locale(@glossary)
+      %a.btn.language_value(href='#' data-locale="#{glossary_locale}")= Codes::Language.translate_language_code(glossary_locale)
+      %a.btn.dropdown-toggle(href='#' data-toggle="dropdown")
+        %span.caret
+      %ul.dropdown-menu
+        %li
+          %a{href: '#', data: { locale: 'all'} }= t('shared.all')
+        %li.divider
+        - @glossary.languages.each do |language_code|
+          %li
+            %a{href: '#', data: { locale: language_code.language_code} }= language_code.language
+    .clear_both
+  .clear_both
+
+
+- @glossary.language_codes.each do |glossary_locale|
   - translation = @glossary.translation(glossary_locale) || @glossary.translations.new(:locale => glossary_locale)
   - translation_class = translation.class
-  .glossary_locale_detail{ :data => {:locale => glossary_locale}}
-    %div{:style => "float:right; padding: 0 10px 0 0"}
-      = glossary_locale
+  .glossary_locale_detail{ :data => {:locale => glossary_locale} }
+    .language_indicator
+      = Codes::Language.translate_language_code(glossary_locale)
     %dl.dl-horizontal
       %dt
         %strong= "#{translation_class.human_attribute_name(:name)}:"
