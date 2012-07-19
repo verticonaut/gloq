@@ -5,7 +5,7 @@ class Glossaries::TermsController < ApplicationController
   # GET /glossaries
   # GET /glossaries.json
   def index
-    @terms = @glossary.terms.search_by_name(params[:search_name]) if params[:search_name]
+    @terms = @glossary.terms.search_by_name(params[:search_name])
 
     respond_to do |format|
       format.html # index.html.erb

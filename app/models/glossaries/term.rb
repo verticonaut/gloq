@@ -15,6 +15,9 @@ class Glossaries::Term < ActiveRecord::Base
 
 
   def self.search_by_name(name)
+    # do this better
+    return where('1=1') if name.blank?
+
     joins(:translations).where("lower(localized_glossary_terms.name) LIKE ?", "#{name.downcase}%")
   end
 
