@@ -1,0 +1,32 @@
+%style
+  :sass
+
+    .glossary_locale_detail
+      .language_indicator
+        float:   right
+        padding: 0 10px 0 0
+
+
+- @term.errors.each do |name, msg|
+  - if name =~ /^extra_/
+    .alert.alert-error
+      %a.close(data-dismiss="alert") ×
+      = msg
+
+= simple_form_for @term, :url => glossary_terms_path(@term.glossary.id), :html => { :class => 'form-horizontal' } do |f|
+
+  %h4 Name and description for each language (fill in at least on name).
+
+  - @term.glossary.language_codes.each do |language|
+    .glossary_locale_detail
+      .language_indicator
+        = Codes::Language.translate_language_code(language)
+      = f.simple_fields_for :translations, index: language do |translations_f|
+        = translations_f.input :name,        index: language,  input_html: { value: @term.name(language) }
+        = translations_f.input :abbreviation, index: language, input_html: { value: @term.name(language) }
+        = translations_f.input :description, index: language,  input_html: { value: @term.description(language) }
+
+  .form-actions
+    = f.submit nil, :class => 'btn btn-primary'
+    = link_to t('.cancel', :default => t("helpers.links.cancel")),
+                glossary_path(@term.glossary), :class => 'btn'

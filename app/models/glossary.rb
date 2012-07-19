@@ -1,11 +1,13 @@
 class Glossary < ActiveRecord::Base
   include Moodler::ModelTranslator
-  localized_attributes  :name, :abbreviation, :description, :type => :associated, :dependent => :destroy
+  localized_attributes  :name, :description, :type => :associated, :dependent => :destroy
 
   validates_presence_of :languages_string
   validate              :validate_translations_defined
 
   attr_accessible       :languages_string
+
+  has_many :terms, class_name: 'Glossaries::Term'
 
 
   def self.create_glossary(attributes)
@@ -19,6 +21,19 @@ class Glossary < ActiveRecord::Base
     end
 
     glossary
+  end
+
+  def create_term(attributes)
+    translations_attributes = attributes.extract!(:translations)[:translations]
+
+    term = terms.new
+
+    (translations_attributes || []).each do |language, translation_attributes|
+      localization_attrs = translation_attributes.merge(:locale => language)
+      term.translations.new(localization_attrs) if Localized::Glossaries::Term.new(localization_attrs).valid?
+    end
+
+    term
   end
 
   def update_glossary(attributes)
@@ -89,4 +104,5 @@ class Glossary < ActiveRecord::Base
 
     self
   end
+
 end

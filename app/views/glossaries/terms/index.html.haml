@@ -52,33 +52,28 @@
         float:   right
         padding: 0 10px 0 0
 
-.page-header
-  %h1
+.page-my_header
+  %h1(style='float:left')
     = "Glossary: "
     = @glossary.translations.map { |translation| "<span class='title' data-locale='#{translation.locale}'>#{translation.name}</span>" }.join("<span class='title-separator'> / </span>").html_safe
 
-  %dl.dl-horizontal
-    %dt
-      %strong= "#{@glossary.class.human_attribute_name(:languages)}:"
-    %dd= @glossary.languages.map { |language| language.language }.join(', ')
-
-.btn-toolbar
-  .language_selection
-    .btn-label= "#{t('shared.language')}:"
-    .btn-group.language_select
-      - glossary_locale = glossary_locale(@glossary)
-      %a.btn.language_value(href='#' data-locale="#{glossary_locale}")= Codes::Language.translate_language_code(glossary_locale)
-      %a.btn.dropdown-toggle(href='#' data-toggle="dropdown")
-        %span.caret
-      %ul.dropdown-menu
-        %li
-          %a{href: '#', data: { locale: 'all'} }= t('shared.all')
-        %li.divider
-        - @glossary.languages.each do |language_code|
+  .btn-toolbar
+    .language_selection
+      .btn-label= "#{t('shared.language')}:"
+      .btn-group.language_select
+        - glossary_locale = glossary_locale(@glossary)
+        %a.btn.language_value(href='#' data-locale="#{glossary_locale}")= Codes::Language.translate_language_code(glossary_locale)
+        %a.btn.dropdown-toggle(href='#' data-toggle="dropdown")
+          %span.caret
+        %ul.dropdown-menu
           %li
-            %a{href: '#', data: { locale: language_code.language_code} }= language_code.language
+            %a{href: '#', data: { locale: 'all'} }= t('shared.all')
+          %li.divider
+          - @glossary.languages.each do |language_code|
+            %li
+              %a{href: '#', data: { locale: language_code.language_code} }= language_code.language
+      .clear_both
     .clear_both
-  .clear_both
 
 
 - @glossary.language_codes.each do |glossary_locale|
@@ -95,21 +90,14 @@
         %strong= "#{translation_class.human_attribute_name(:description)}:"
       %dd= translation.description.present? ? translation.description : '_'.html_safe
 
-.form-actions
-  = link_to t('.back', :default => t("helpers.links.back")),
-            glossaries_path, :class => 'btn'
-  = link_to t('.edit', :default => t("helpers.links.edit")),
-            edit_glossary_path(@glossary), :class => 'btn'
-  = link_to t('.destroy', :default => t("helpers.links.destroy")),
-            glossary_path(@glossary),
-            :method => 'delete',
-            :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-            :class => 'btn btn-danger'
-
 %h2
-  = link_to 'Begriffe', glossary_terms_path(@glossary)
+  Begriffe
   = link_to t('.add', :default => t("helpers.links.add_a_term")),
             new_glossary_term_path(@glossary),
             :class => 'btn btn-primary'
 
-= render @glossary.terms
+- ('A'..'Z').each do |letter|
+  = link_to letter, glossary_terms_path(@glossary.id, { search_name: letter })
+= link_to t('shared.single_word.all'), glossary_terms_path(@glossary.id)
+
+= render @terms

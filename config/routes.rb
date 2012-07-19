@@ -3,6 +3,8 @@ MyNewApp::Application.routes.draw do
     collection do
       post :locale
     end
+
+    resources :terms, controller: 'glossaries/terms'
   end
 
   # The priority is based upon order of creation:

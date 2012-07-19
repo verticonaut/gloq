@@ -1,4 +1,4 @@
-module Moodler
+  module Moodler
   module ModelTranslator
 
     def self.included(base)
@@ -14,13 +14,14 @@ module Moodler
     def localized_attributes(*args)
       options         = args.last.is_a?(Hash) ? args.slice!(-1) : {}
       options         = DEFAULT_OPTIONS.merge(options)
+      assoc_options   = options.slice!(:type, :translations_class_name, :null_value)
       attributes      = args
 
       case options[:type]
         when :associated
           translations_class_name = options[:translation_class_name] || "::Localized::#{self.name}"
 
-          has_many :translations, options.slice(:dependent).merge({:class_name => translations_class_name})
+          has_many :translations, {:class_name => translations_class_name}.merge(assoc_options)
           default_scope :include => :translations
 
           class_eval <<-METHOD

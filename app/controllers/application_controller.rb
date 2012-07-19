@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
     session[:glossary_locale] = locale
   end
 
+  def get_glossary_locale
+    session[:glossary_locale]
+  end
+
   def glossary_locale(glossary_or_id)
     glossary = glossary_or_id.kind_of?(Numeric) ? Glossary.find(id.to_i) : glossary_or_id
     locale   = session[:glossary_locale]

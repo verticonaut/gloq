@@ -1,0 +1,18 @@
+- term.language_codes.each do |glossary_locale|
+  - translation = term.translation(glossary_locale) || term.translations.new(:locale => glossary_locale)
+  - translation_class = translation.class
+  .glossary_locale_detail{ :data => {:locale => glossary_locale} }
+    .language_indicator
+      = Codes::Language.translate_language_code(glossary_locale)
+    %dl.dl-horizontal
+      %dt
+        %strong= "#{translation_class.human_attribute_name(:name)}:"
+      %dd
+        = link_to translation.name.present? ? translation.name : '_'.html_safe, glossary_term_path(term.glossary, term, :locale => glossary_locale)
+
+      %dt
+        %strong= "#{translation_class.human_attribute_name(:abbreviation)}:"
+      %dd= translation.abbreviation.present? ? translation.abbreviation : '_'.html_safe
+      %dt
+        %strong= "#{translation_class.human_attribute_name(:description)}:"
+      %dd= translation.description.present? ? translation.description : '_'.html_safe

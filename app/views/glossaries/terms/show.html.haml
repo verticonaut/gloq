@@ -54,13 +54,8 @@
 
 .page-header
   %h1
-    = "Glossary: "
-    = @glossary.translations.map { |translation| "<span class='title' data-locale='#{translation.locale}'>#{translation.name}</span>" }.join("<span class='title-separator'> / </span>").html_safe
-
-  %dl.dl-horizontal
-    %dt
-      %strong= "#{@glossary.class.human_attribute_name(:languages)}:"
-    %dd= @glossary.languages.map { |language| language.language }.join(', ')
+    = "Eintrag für Glossary: "
+    = @term.glossary.translations.map { |translation| "<span class='title' data-locale='#{translation.locale}'>#{translation.name}</span>" }.join("<span class='title-separator'> / </span>").html_safe
 
 .btn-toolbar
   .language_selection
@@ -74,15 +69,15 @@
         %li
           %a{href: '#', data: { locale: 'all'} }= t('shared.all')
         %li.divider
-        - @glossary.languages.each do |language_code|
+        - @term.glossary.languages.each do |language_code|
           %li
             %a{href: '#', data: { locale: language_code.language_code} }= language_code.language
     .clear_both
   .clear_both
 
 
-- @glossary.language_codes.each do |glossary_locale|
-  - translation = @glossary.translation(glossary_locale) || @glossary.translations.new(:locale => glossary_locale)
+- @term.language_codes.each do |glossary_locale|
+  - translation = @term.translation(glossary_locale) || @term.translations.new(:locale => glossary_locale)
   - translation_class = translation.class
   .glossary_locale_detail{ :data => {:locale => glossary_locale} }
     .language_indicator
@@ -92,24 +87,21 @@
         %strong= "#{translation_class.human_attribute_name(:name)}:"
       %dd= translation.name.present? ? translation.name : '_'.html_safe
       %dt
+        %strong= "#{translation_class.human_attribute_name(:abbreviation)}:"
+      %dd= translation.abbreviation.present? ? translation.abbreviation : '_'.html_safe
+      %dt
         %strong= "#{translation_class.human_attribute_name(:description)}:"
       %dd= translation.description.present? ? translation.description : '_'.html_safe
 
 .form-actions
   = link_to t('.back', :default => t("helpers.links.back")),
-            glossaries_path, :class => 'btn'
+            glossary_terms_path(@term.glossary), :class => 'btn'
   = link_to t('.edit', :default => t("helpers.links.edit")),
-            edit_glossary_path(@glossary), :class => 'btn'
+            edit_glossary_term_path(@term.glossary, @term), :class => 'btn'
   = link_to t('.destroy', :default => t("helpers.links.destroy")),
-            glossary_path(@glossary),
+            glossary_term_path(@term.glossary, @term),
             :method => 'delete',
             :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
             :class => 'btn btn-danger'
 
-%h2
-  = link_to 'Begriffe', glossary_terms_path(@glossary)
-  = link_to t('.add', :default => t("helpers.links.add_a_term")),
-            new_glossary_term_path(@glossary),
-            :class => 'btn btn-primary'
 
-= render @glossary.terms
