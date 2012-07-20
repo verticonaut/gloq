@@ -11,18 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120719125600) do
+ActiveRecord::Schema.define(:version => 20120720191739) do
 
   create_table "glossaries", :force => true do |t|
-    t.string   "languages_string", :null => false
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.string   "languages_string",                :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "terms_count",      :default => 0
   end
 
   create_table "glossary_terms", :force => true do |t|
     t.integer  "glossary_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "terms_count", :default => 0
   end
 
   create_table "localized_glossaries", :force => true do |t|

@@ -46,4 +46,5 @@ group :test, :development do
   gem 'factory_girl_rails'
 
   gem 'yard'
+  gem 'quiet_assets'
 end

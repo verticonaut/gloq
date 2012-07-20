@@ -55,7 +55,8 @@
 .page-header
   %h1
     = "Eintrag für Glossary: "
-    = @term.glossary.translations.map { |translation| "<span class='title' data-locale='#{translation.locale}'>#{translation.name}</span>" }.join("<span class='title-separator'> / </span>").html_safe
+    - name = @term.glossary.translations.map { |translation| "<span class='title' data-locale='#{translation.locale}'>#{translation.name}</span>" }.join("<span class='title-separator'> / </span>").html_safe
+    = link_to name, glossary_path(@glossary)
 
 .btn-toolbar
   .language_selection

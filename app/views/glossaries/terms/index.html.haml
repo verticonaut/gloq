@@ -90,11 +90,12 @@
         %strong= "#{translation_class.human_attribute_name(:description)}:"
       %dd= translation.description.present? ? translation.description : '_'.html_safe
 
+
 %h2
   Begriffe
   = link_to t('.add', :default => t("helpers.links.add_a_term")),
             new_glossary_term_path(@glossary),
-            :class => 'btn btn-primary'
+            :class => 'btn bbtn-primary'
 
 - ('A'..'Z').each do |letter|
   = link_to letter, glossary_terms_path(@glossary.id, { search_name: letter })

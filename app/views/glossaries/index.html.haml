@@ -13,17 +13,55 @@
       .language_select
         float: left
 
+    .ui-autocomplete
+      li
+        font-size: 9pt
+
+
+%script
+  :plain
+
+    $(function() {
+      $("#glossary-search-field").autocomplete({
+        minLength: 0,
+        source: 'glossaries?search_g_locale=' + $("#search-locale").data('locale'),
+        focus: function( event, ui ) {
+          $( "#glossary-search-field" ).val( ui.item.name );
+          return false;
+        },
+        select: function( event, ui ) {
+          window.location = '/glossaries/' + ui.item.id;
+        }
+      })
+      .data( "autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li></li>" )
+          .data( "item.autocomplete", item )
+          .append( "<a><b>" + item.name + "</b><br>" + item.description + "</a>" )
+          .appendTo( ul );
+      };
+    });
+
+
+
+/ <div class="demo">
+/   <div id="project-label">Select a project (type "j" for a start):</div>
+/   <img id="project-icon" src="/demos/autocomplete/images/transparent_1x1.png"  class="ui-state-default"//>
+/   <input id="project"/>
+/   <input type="hidden" id="project-id"/>
+/   <p id="project-description"></p>
+/ </div><!-- End demo -->
+
 
 - model_class = Glossary.new.class
 .page-header
   .btn-toolbar
     %h1(style='display:inline')= t('.title', :default => model_class.model_name.human.pluralize)
     .language_selection
-      %form.form-search
-        %input.search-query{:style => 'float:left;', :type => "text", :placeholder => "Type a text to search&hellip;".html_safe}
+      %form.form-search{action: '/glossaries'}
+        %input#glossary-search-field{:name => 'term', :style => 'float:left;', :type => "text", :placeholder => "Type a text to search&hellip;".html_safe, :value => "#{params[:term]}"}
 
         .btn-group.language_select
-          %a.btn.language_value(href='#' data-locale='all')= t('shared.all')
+          %a.btn.language_value#search-locale(href='#' data-locale='all')= t('shared.all')
           %a.btn.dropdown-toggle(href='#' data-toggle="dropdown")
             %span.caret
           %ul.dropdown-menu

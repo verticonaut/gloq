@@ -106,10 +106,22 @@
             :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
             :class => 'btn btn-danger'
 
-%h2
-  = link_to 'Begriffe', glossary_terms_path(@glossary)
-  = link_to t('.add', :default => t("helpers.links.add_a_term")),
-            new_glossary_term_path(@glossary),
-            :class => 'btn btn-primary'
+
+%ul.nav.nav-tabs
+  %li.active
+    %a(href="#{glossary_terms_path(@glossary)}") Begriffe
+  %li.dropdown
+    %a.dropdown-toggle(href="#" data-toggle="dropdown")
+      Sets
+      %b.caret
+    %ul.dropdown-menu
+      %li Alle
+      %li.divider
+      %li Öffentliche
+      %li Persönliche
+
+= link_to content_tag(:i, nil, :class => 'icon-plus-sign') + " " + t('.add', :default => t("helpers.links.add_a_term")),
+          new_glossary_term_path(@glossary),
+          :class => 'btn'
 
 = render @glossary.terms

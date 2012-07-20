@@ -7,7 +7,7 @@ class Glossaries::Term < ActiveRecord::Base
     :dependent   => :destroy,
     :foreign_key => :glossary_term_id
 
-  belongs_to :glossary
+  belongs_to :glossary, :counter_cache => true
 
   delegate :languages,
            :language_codes,

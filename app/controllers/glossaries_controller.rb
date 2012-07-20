@@ -2,11 +2,14 @@ class GlossariesController < ApplicationController
   # GET /glossaries
   # GET /glossaries.json
   def index
-    @glossaries = Glossary.all
+    glossary_search_locale = params[:search_g_locale]
+    @glossaries            = Glossary.search_by(params[:term], glossary_search_locale).all
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @glossaries }
+      format.json {
+        render json: Glossary.glossary_to_json(@glossaries, glossary_search_locale)
+      }
     end
   end
 
@@ -87,4 +90,6 @@ class GlossariesController < ApplicationController
     set_glossary_locale(params[:locale])
     render nothing: true
   end
+
+
 end

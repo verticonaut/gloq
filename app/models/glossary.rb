@@ -105,4 +105,30 @@ class Glossary < ActiveRecord::Base
     self
   end
 
+  def self.search_by(term, locale = nil)
+    return self if term.blank?
+
+    search_term = "%#{term.strip.downcase}%"
+
+    conditions  = ["(lower(localized_glossaries.name) like :search_term \
+                     or lower(localized_glossaries.description) like :search_term)"]
+    paramseters = { :search_term => search_term}
+    if locale.present? and locale != 'all'
+      conditions << "localized_glossaries.locale = :locale"
+      paramseters[:locale] = locale
+    end
+
+    where(conditions.join(' and '), paramseters)
+  end
+
+  # FIXME: use build like stuff
+  def self.glossary_to_json(glossaries, locale)
+    glossaries.map do |glossary|
+      {
+        id:          glossary.id,
+        name:        glossary.name,
+        description: glossary.description,
+      }
+    end
+  end
 end
