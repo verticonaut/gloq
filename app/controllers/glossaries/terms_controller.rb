@@ -5,7 +5,10 @@ class Glossaries::TermsController < ApplicationController
   # GET /glossaries
   # GET /glossaries.json
   def index
-    @terms = @glossary.terms.search_by_name_and_type(params[:search_term], params[:type])
+    type         = params[:type]
+    search_term  = params[:search_term]
+    @terms       = @glossary.terms.search_by_name_and_type(search_term, type)
+    @search_term = type == 'term_start' ? '' : search_term
 
     respond_to do |format|
       format.html # index.html.erb

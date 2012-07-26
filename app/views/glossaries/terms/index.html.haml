@@ -138,7 +138,7 @@
 
 %ul.nav.nav-tabs
   %li.active
-    %a(href="#{glossary_terms_path(@glossary)}") Begriffe
+    %a(href="#") Begriffe
   %li.dropdown
     %a.dropdown-toggle(href="#" data-toggle="dropdown")
       Sets
@@ -155,13 +155,13 @@
           :class => 'btn'
 
 - ('A'..'Z').each do |letter|
-  = link_to letter, glossary_terms_path(@glossary.id, { search_term: letter, type: 'term_start'})
+  = search_term_link(letter, @glossary)
 = link_to t('shared.single_word.all'), glossary_terms_path(@glossary.id)
 
 .search_section
   %form.form-search{action: glossary_terms_path(@glossary.id)}
     %input#search-type-input{:name => 'type', :type => 'hidden', :value => params[:type] || 'all'}
-    %input#glossary-search-field{:name => 'search_term', :style => 'float:left;', :type => "text", :placeholder => "Type a text to search&hellip;".html_safe, :value => "#{params[:search_term]}"}
+    %input#glossary-search-field{:name => 'search_term', :style => 'float:left;', :type => "text", :placeholder => "Type a text to search&hellip;".html_safe, :value => "#{@search_term}"}
 
     .btn-group.search_type_select
       %a.btn.search_type_value#actual-search-type(href='#')= t('shared.all')
