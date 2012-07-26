@@ -103,7 +103,7 @@
   = link_to t('.destroy', :default => t("helpers.links.destroy")),
             glossary_path(@glossary),
             :method => 'delete',
-            :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+            :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))},
             :class => 'btn btn-danger'
 
 
@@ -120,8 +120,13 @@
       %li Öffentliche
       %li Persönliche
 
+
 = link_to content_tag(:i, nil, :class => 'icon-plus-sign') + " " + t('.add', :default => t("helpers.links.add_a_term")),
           new_glossary_term_path(@glossary),
           :class => 'btn'
+
+- ('A'..'Z').each do |letter|
+  = link_to letter, glossary_terms_path(@glossary.id, { search_name: letter })
+= link_to t('shared.single_word.all'), glossary_terms_path(@glossary.id)
 
 = render @glossary.terms

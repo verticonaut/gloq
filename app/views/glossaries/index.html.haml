@@ -1,7 +1,7 @@
 %style
   :sass
 
-    .language_selection
+    .search_section
       float: right
 
       .btn-label
@@ -42,21 +42,11 @@
     });
 
 
-
-/ <div class="demo">
-/   <div id="project-label">Select a project (type "j" for a start):</div>
-/   <img id="project-icon" src="/demos/autocomplete/images/transparent_1x1.png"  class="ui-state-default"//>
-/   <input id="project"/>
-/   <input type="hidden" id="project-id"/>
-/   <p id="project-description"></p>
-/ </div><!-- End demo -->
-
-
 - model_class = Glossary.new.class
 .page-header
   .btn-toolbar
     %h1(style='display:inline')= t('.title', :default => model_class.model_name.human.pluralize)
-    .language_selection
+    .search_section
       %form.form-search{action: '/glossaries'}
         %input#glossary-search-field{:name => 'term', :style => 'float:left;', :type => "text", :placeholder => "Type a text to search&hellip;".html_safe, :value => "#{params[:term]}"}
 
@@ -74,7 +64,6 @@
 
         %button.btn(type="submit")Search
 
-      .clear_both
     .clear_both
 
 

@@ -5,11 +5,11 @@ class Glossaries::TermsController < ApplicationController
   # GET /glossaries
   # GET /glossaries.json
   def index
-    @terms = @glossary.terms.search_by_name(params[:search_name])
+    @terms = @glossary.terms.search_by_name_and_type(params[:search_term], params[:type])
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @glossaries }
+      format.json { render json: @terms }
     end
   end
 

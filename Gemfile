@@ -47,4 +47,6 @@ group :test, :development do
 
   gem 'yard'
   gem 'quiet_assets'
+
+  gem 'awesome_print'
 end
