@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.7'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -49,4 +49,10 @@ group :test, :development do
   gem 'quiet_assets'
 
   gem 'awesome_print'
+
+  gem 'guard-rails'
+  gem 'guard-bundler'
+  gem 'guard-test'
+
+  gem 'mailcatcher'
 end
